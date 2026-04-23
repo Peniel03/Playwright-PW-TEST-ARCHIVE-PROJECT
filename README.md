@@ -1,6 +1,6 @@
 # Playwright-PW-TEST-ARCHIVE-PROJECT
 
-# Playwright Automation Task – Negotiator Registration
+# Playwright Automation Task : Negotiator Registration
 
 ## What was implemented
 - Full automation of the provided scenario using the exact baseline framework.
