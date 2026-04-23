@@ -52,10 +52,7 @@ export default defineConfig({
       name: 'firefox',
       use: {
         browserName: 'firefox',
-        viewport: null,
-        launchOptions: {
-          // Firefox does not support --start-maximized;  
-        },
+        viewport: null, // enables real maximized window behavior
       },
     },
   ],

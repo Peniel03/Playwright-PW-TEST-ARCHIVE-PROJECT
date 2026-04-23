@@ -23,4 +23,16 @@ export class LoginPage extends BasePage {
     logger.info("⏳ Wait for successful login");
     await this.page.waitForURL('**/the-negotiation-experts/classes');
   }
+
+  async clickCreateNegotiatorAccount() {
+    logger.info('Waiting for and Clicking "Create a Negotiator account"');
+    const createButton = this.page.getByRole('button', { name: /Create a Negotiator account/i })
+      .or(this.page.getByText(/Create a Negotiator account/i))
+      .first();
+
+    await createButton.waitFor({ state: 'visible', timeout: 15000 });
+    await createButton.click();
+
+    logger.info('Successfully clicked "Create a Negotiator account" button');
+  }
 }
