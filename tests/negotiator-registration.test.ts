@@ -14,7 +14,7 @@ test.describe('Negotiator Account Registration', () => {
   });
 
   test('should register new negotiator, confirm email via Mailcatcher, and activate account', async ({ page, context }) => {
-    test.setTimeout(60000);
+    test.setTimeout(120000);
     const loginPage = new LoginPage(page);
     const registrationPage = new RegistrationPage(page);
 
@@ -69,14 +69,28 @@ test.describe('Negotiator Account Registration', () => {
 
       await mailPage.goto('https://qa6.negsim.com/mailcatcher', { timeout: 30000 });
       const activationUrl = await mailCatcher.findAndClickCompleteRegistrationLink(testEmail);
-      //await mailCatcher.findAndClickCompleteRegistrationLink(testEmail);
 
       await mailPage.close();
       await mailContext.close();
 
       logger.info(`Found activation URL, navigating main page to it`);
+       try {
+        await page.goto(activationUrl, { waitUntil: 'domcontentloaded', timeout: 30000 });
+        logger.info('✅ Successfully navigated to activation URL');
+        
+        await page.waitForURL(/account\/profile/, { timeout: 25000 });
+        logger.info('✅ Redirected to profile page');
+        
+        await page.waitForLoadState('networkidle', { timeout: 15000 });
+        await page.waitForTimeout(2000);
+        
+        logger.info('✅ Profile page fully loaded');
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        logger.error(`❌ Activation failed: ${errorMessage}`);
+        throw error;
+      }
 
-      await page.goto(activationUrl, { waitUntil: 'domcontentloaded', timeout: 30000 });
       logger.info('Mailcatcher step completed');
     });
 
